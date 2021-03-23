@@ -4,8 +4,8 @@ import Axios from 'axios'
 
 import SetStateContext from '../SetStateContext'
 
-import Node from './Node'
 import BinaryChoiceTree from './BinaryChoiceTree'
+import PlaylistGenerator from './PlaylistGenerator'
 
 function Form() {
     const setState = useContext(SetStateContext)
@@ -136,6 +136,7 @@ function Form() {
     if (loading) return <h2>Loading...</h2>
 
     if (increment == 1) return ( // Starting point
+        <>
         <form onSubmit={submitFirstChoice}>
             <input key={songs[0].name} onChange={handleChoice} type="radio" name="1" value={songs[0].name} checked={radioIndex == 1} />
             <label>{ songs[0].name }</label><br/>
@@ -144,9 +145,11 @@ function Form() {
             <br/>
             <button>Next</button>
         </form>
+        <PlaylistGenerator />
+        </>
     )
 
-    else if (increment < 30) return (
+    else if (increment < 3) return (
         <form onSubmit={submitChoice}>
             <input key={currentInsertionPoint.data} onChange={handleChoice} type="radio" name="1" value={currentInsertionPoint.data} checked={radioIndex == 1} />
             <label>{ currentInsertionPoint.data }</label><br/>
@@ -160,7 +163,7 @@ function Form() {
     else return (
         <div>
             Here is the final list:<br/>
-            <button onClick={checkList}>Check!</button>
+            <button className="space-right" onClick={checkList}> Check!</button>
         </div>
     )
 }
