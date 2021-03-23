@@ -1,0 +1,8 @@
+.main-content {
+    margin: 2em 20% 0;
+}
+
+.flash {
+    color: red;
+    animation: float 2s ease-out;
+}

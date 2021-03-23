@@ -1,0 +1,23 @@
+# Main
+.env
+.vscode
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Distribution Dirs
+dist/
+
+# Logs
+*.log
+
+# Testing
+*test.js
+
+# Extra
+.npm
+.tgz
+.eslintcache
+
+
