@@ -1,39 +1,117 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-var querystring = require('querystring');
-const app = express();
-app.use(cors());
+require('dotenv').config()
+const express = require('express')
+const assert = require('assert')
+const cookieParser = require('cookie-parser')
+var request = require('request')
+var querystring = require('querystring')
+const app = express()
+//app.use(cookieParser())
 
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DB_String;
-const my_client_id = process.env.Spotify_Client_Id;
-const redirect_uri = process.env.Spotify_Redirect_URI;
+const axios = require('axios').default
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect();
+const MongoClient = require('mongodb').MongoClient
+const uri = process.env.DB_String
+const my_client_id = process.env.Spotify_Client_Id
+const redirect_uri = process.env.Spotify_Redirect_URI
+const my_client_secret = process.env.Spotify_Secret
 
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+
+// Fetch songs from database and return to api
 app.get('/songs', (req, res) => {
 	client.db("Eminem-sorter").collection("Songs").find().toArray((err, docs) => {
-		res.send(docs);
-	});
-});
+		res.send(docs)
+	})
+})
+
+// Spotify Section
+var stateKey = 'spotify_auth_state'
+
+function generateRandomString(length) {
+	var text = ''
+	var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+	for (var i = 0; i < length; i++) {
+	  text += possible.charAt(Math.floor(Math.random() * possible.length))
+	}
+	return text
+}
 
 app.get('/login', (req, res) => {
-	var scope = 'user-read-private user-read-email'
-	res.redirect('https://accounts.spotify.com/authorize' +
-	querystring.stringify({
-		response_type: 'code',
-		client_id: my_client_id,
-		scope: scope,
-		redirect_uri: redirect_uri
-	}))
+	// var state = generateRandomString(16);
+  	// res.cookie(stateKey, state);
+	var scope = 'user-read-private user-read-email user-library-modify user-top-read user-modify-playback-state playlist-modify-public';
+	res.set('Access-Control-Allow-Origin', 'http://localhost:3000')
+  	res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: my_client_id,
+      scope: scope,
+      redirect_uri: redirect_uri
+    }))
 })
 
 app.get('/callback', (req, res) => {
-	console.log(req)
-})
+	var code = req.query.code || null;
+	var state = req.query.state || null;
+	var storedState = req.cookies ? req.cookies[stateKey] : null;
 
-app.listen(process.env.PORT, () =>
-	console.log(`Listening on port ${process.env.PORT}!`),
-);
+	if (state === null || state !== storedState) {
+		res.redirect('/#' +
+		  querystring.stringify({
+			error: 'state_mismatch'
+		}))
+	} else {
+		res.clearCookie(stateKey)
+		var authOptions = {
+		url: 'https://accounts.spotify.com/api/token',
+		form: {
+			code: code,
+			redirect_uri: redirect_uri,
+			grant_type: 'authorization_code'
+		},
+		headers: {
+			'Authorization': 'Basic ' + (new Buffer(my_client_id + ':' + my_client_secret).toString('base64'))
+		},
+		json: true
+		}
+		request.post(authOptions, function(error, response, body) {
+			if (!error && response.statusCode === 200) {
+				var access_token = body.access_token,
+					refresh_token = body.refresh_token;
+				var options = {
+					url: 'https://api.spotify.com/v1/me',
+					headers: { 'Authorization': 'Bearer ' + access_token },
+					json: true
+				};
+
+				// use the access token to access the Spotify Web API
+				request.get(options, function(error, response, body) {
+					console.log(body);
+				})
+
+				// we can also pass the token to the browser to make requests from there
+				res.redirect('/#' +
+					querystring.stringify({
+						access_token: access_token,
+						refresh_token: refresh_token
+				  	}))
+			} else {
+				res.redirect('/#' +
+				querystring.stringify({
+					error: 'invalid_token'
+				}))
+			}
+		})
+	}
+})
+// Spotify Section End
+
+
+client.connect(function(err) {
+	assert.equal(null, err);
+	console.log('Connected successfully to server');
+	
+	app.listen(process.env.PORT, () =>
+		console.log(`Listening on port ${process.env.PORT}!`),
+	);
+});

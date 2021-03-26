@@ -11,12 +11,16 @@
   "author": "Hassan Hajarat",
   "license": "ISC",
   "dependencies": {
+    "assert": "^2.0.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.4",
     "querystring": "^0.2.1",
+    "request": "^2.88.2",
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {

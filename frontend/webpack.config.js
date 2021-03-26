@@ -12,6 +12,12 @@ module.exports = {
   devServer: {
     port: 3000,
     contentBase: path.join(__dirname, "app"),
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8888',
+        pathRewrite: { '^/api': '' },
+      },
+    },
     hot: true,
     historyApiFallback: { index: "index.html" }
   },
