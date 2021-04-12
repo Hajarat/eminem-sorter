@@ -2,7 +2,23 @@
     margin: 2em 20% 0;
 }
 
+.main-form {
+    margin-top: 2rem;
+}
+
 .flash {
     color: red;
     animation: float 2s ease-out;
+}
+
+.form-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.form-input {
+    padding: 0.8rem;
+    margin: 0 2rem 0 0;
+    height: 4em;
+    width: 12em;
 }

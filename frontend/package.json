@@ -19,6 +19,7 @@
     "bootstrap": "^4.6.0",
     "functional-red-black-tree": "^1.0.1",
     "immer": "^8.0.1",
+    "localtunnel": "^2.0.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.1",
     "react-dom": "^17.0.1",
