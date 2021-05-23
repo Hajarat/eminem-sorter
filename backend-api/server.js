@@ -37,11 +37,11 @@ function generateRandomString(length) {
 }
 
 app.get('/login', (req, res) => {
-	// var state = generateRandomString(16);
-  	// res.cookie(stateKey, state);
+	var state = generateRandomString(16);
+  	res.cookie(stateKey, state);
 	var scope = 'user-read-private user-read-email user-library-modify user-top-read user-modify-playback-state playlist-modify-public';
 	res.set('Access-Control-Allow-Origin', 'http://localhost:3000')
-  	res.redirect('https://accounts.spotify.com/authorize?' +
+  	res.send('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
       client_id: my_client_id,
