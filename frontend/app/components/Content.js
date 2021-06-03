@@ -1,18 +1,18 @@
 import React, { useEffect } from "react"
 
-// My Components
-import Container from './Container'
-import Form from './Form'
-import FlashMessages from './FlashMessages'
+import { Link } from 'react-router-dom'
 
 function Content() {
     return (
-        <Container>
-            <h1>Welcome to Eminem Sorter</h1>
-            <p>You're going to make binary choices. For each choice select your favorite song from the two. We'll create your ordered list of favorites as you go. Only songs from Music to be murdered by side A & Music to be murdered by side B will be used.</p>
-            <FlashMessages />
-            <Form />
-        </Container>
+        <div>
+            <h1>Welcome to MTBMB Sorter</h1>
+            <p>Join us in This fun but equally brutal way to determine your favorites to least favorites from both sides (A&B) of the MTBMB albums.</p>
+            <p>This will hopefully be the first of many experiments on this site.</p>
+            <p>Watch us both do this:</p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/FQLbCfTGqWE" title="YouTube video player" frameBorder="3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="embedded-video" />
+            <p>We though we would get more polarizing results...</p>
+            <Link to="/sorter" role="button">Create my list</Link>
+        </div>
     )
 }
 
