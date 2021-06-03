@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import StateContext from './StateContext'
 import SetStateContext from './SetStateContext'
@@ -17,7 +18,7 @@ function EminemSorter() {
         <StateContext.Provider value={flashMessage}>
             <SetStateContext.Provider value={setFlashMessage}>
                 <Header/>
-                <Content/>
+                <Content />
                 <Footer/>
             </SetStateContext.Provider>
         </StateContext.Provider>

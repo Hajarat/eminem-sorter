@@ -5,11 +5,11 @@ export default class BinaryChoiceTree {
         this.root = null
     }
 
-    insertRoot(data, rightElement) {
+    insertRoot(data, url, rightElement, rightElementURL) {
         if(this.root === null) {
-            const newRoot = new Node(data)
+            const newRoot = new Node(data,url)
             this.root = newRoot
-            newRoot.right = new Node(rightElement)
+            newRoot.right = new Node(rightElement, rightElementURL)
         } else {
             console.log("Error! root already exists")
         }

@@ -3,35 +3,62 @@ import React, { useState, useEffect, useReducer } from "react"
 import Axios from 'axios'
 
 import BinaryChoiceTree from './BinaryChoiceTree'
+<<<<<<< Updated upstream
 import PlayListGenerator from "./PlaylistGenerator"
+=======
+import SpotifyLogin from './SpotifyLogin'
+>>>>>>> Stashed changes
 
 function Form() {
     
     const [loading, setLoading] = useState(true)
     const [songs, setSongs] = useState()
+<<<<<<< Updated upstream
     const [increment, setIncrement] = useState(1)
     const [currentInsertionPoint, setCurrentInsertionPoint] = useState(null)
     const [finalList, setFinalList] = useState({items: []})
+=======
+    const [radioIndex, setRadioIndex] = useState(0)
+    const [choice, setChoice] = useState()
+    const [increment, setIncrement] = useState(1)
+    const [currentInsertionPoint, setCurrentInsertionPoint] = useState()
+    const [playlistToBackendFlag, setPlaylistToBackendFlag] = useState(false)
+>>>>>>> Stashed changes
 
     // Complex Data Structure
     function reducer(state, action) {
         switch (action.type) {
             case "init":
+<<<<<<< Updated upstream
                 if (action.value === songs[0].name) {
                     state.tree.insertRoot(songs[0], songs[1])
                 } else {
                     state.tree.insertRoot(songs[1], songs[0])
+=======
+                if (choice === songs[0].name) {
+                    state.tree.insertRoot(songs[0].name, songs[0].url, songs[1].name, songs[1].url)
+                } else {
+                    state.tree.insertRoot(songs[1].name, songs[1].url, songs[0].name, songs[0].url)
+>>>>>>> Stashed changes
                 }
                 setCurrentInsertionPoint(state.tree.root)
                 setIncrement((increment) => {return increment+1})
                 return state
             case "insertright":
+<<<<<<< Updated upstream
                 currentInsertionPoint.insertRight(songs[increment])
+=======
+                currentInsertionPoint.insertRight(songs[increment].name, songs[increment].url)
+>>>>>>> Stashed changes
                 setCurrentInsertionPoint(state.tree.root)
                 setIncrement((increment) => {return increment+1})
                 return state
             case "insertleft":
+<<<<<<< Updated upstream
                 currentInsertionPoint.insertLeft(songs[increment])
+=======
+                currentInsertionPoint.insertLeft(songs[increment].name, songs[increment].url)
+>>>>>>> Stashed changes
                 setCurrentInsertionPoint(state.tree.root)
                 setIncrement((increment) => {return increment+1})
                 return state
@@ -63,14 +90,25 @@ function Form() {
     // End of Complex Data Structure
 
     useEffect(() => {
-        getSongs();
+        getSongs()
     }, [])
 
     useEffect(() => {
+<<<<<<< Updated upstream
         if(increment == 5) {
             dispatch({type:"tolist"})
         }
     })
+=======
+        async function sendCurrentListToBackend() {
+            // const { data } = Axios.post('/api/save', {
+            //     list: 
+            // })
+        }
+        sendCurrentListToBackend()
+        console.log("update!")
+    }, [playlistToBackendFlag])
+>>>>>>> Stashed changes
 
     async function getSongs() {
         const {data: response} = await Axios.get('/api/songs')
@@ -103,6 +141,7 @@ function Form() {
         }
     }
 
+<<<<<<< Updated upstream
     // Render Section Below
     if (loading) return <h2>Loading...</h2>
 
@@ -112,8 +151,43 @@ function Form() {
                 <input key={songs[0].name} onClick={submitFirstChoice} className="form-input" type="button" value={songs[0].name} />
                 <input key={songs[1].name} onClick={submitFirstChoice} className="form-input" type="button" value={songs[1].name} />
             </div>
+=======
+    // After a successful insertion, we reset the choice and radio index variables, the initial insertion point back to root, then increment
+    function nextInsertion() {
+        setChoice(null)
+        setRadioIndex(0)
+        setIncrement((increment) => { 
+            newIncrement = increment + 1
+            if (newIncrement === 3) {
+                setPlaylistToBackendFlag(() => {return true})
+            }
+            return newIncrement
+        })
+    }
+
+    // After one step of binary choice insertion, we only need to reset the choice and radio index
+    function nextLevel() {
+        setChoice(null)
+        setRadioIndex(0)
+    }
+
+    // Render Section Below
+    if (loading) return <h2>Loading...</h2>
+
+    if (increment == 1) return ( // Starting point (Edge case)
+        <>
+        <form onSubmit={submitFirstChoice}>
+            <input key={songs[0].name} onChange={handleChoice} type="radio" name="1" value={songs[0].name} checked={radioIndex == 1} />
+            <label>{ songs[0].name }</label><br/>
+            <input key={songs[1].name} onChange={handleChoice} type="radio" name="2" value={songs[1].name} checked={radioIndex == 2} />
+            <label>{ songs[1].name }</label>
+>>>>>>> Stashed changes
             <br/>
         </form>
+<<<<<<< Updated upstream
+=======
+        </>
+>>>>>>> Stashed changes
     )
 
     else if (increment < 5) return (
@@ -128,6 +202,7 @@ function Form() {
 
     else return (
         <div>
+<<<<<<< Updated upstream
             Here is the final list:<br/>
             <br/>
             <ol>
@@ -136,6 +211,10 @@ function Form() {
             })}
             </ol>
             <PlayListGenerator playlist={finalList}/>
+=======
+            List Completed!<br/>
+            <SpotifyLogin playlist={state.list} />
+>>>>>>> Stashed changes
         </div>
     )
 }

@@ -15,9 +15,20 @@
     justify-content: center;
 }
 
+<<<<<<< Updated upstream
 .form-input {
     padding: 0.8rem;
     margin: 0 2rem 0 0;
     height: 4em;
     width: 12em;
+=======
+.space-right {
+    padding-right: 1rem;
+}
+
+.spotify {
+    border: 3px solid green;
+    padding: 1em;
+    margin: 1em 0 1em;
+>>>>>>> Stashed changes
 }
