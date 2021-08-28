@@ -78,7 +78,7 @@ function Form() {
 
     async function getSongs() {
         // We want to contact the backend to fetch the song list from the database
-        const {data: response} = await Axios.get('http://localhost:8888/songs')
+        const {data: response} = await Axios.get('http://3.138.163.87:8888/songs')
         setSongs(response)
         setLoading(false)
     }

@@ -2,6 +2,7 @@
 .DS_Store
 .env
 .vscode
+webpack.config.js
 
 # Dependencies
 node_modules/
